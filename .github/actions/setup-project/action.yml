@@ -20,6 +20,15 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Verify SSH Key
+      shell: bash
+      run: |
+        if [ -z "${{ inputs.ssh-key }}" ]; then
+          echo "❌ SSH key is required but not provided"
+          exit 1
+        fi
+        echo "✅ SSH key provided"
+        
     - name: Checkout
       uses: actions/checkout@v4
       with:

@@ -45,16 +45,6 @@ jobs:
       changelog: ${{ steps.changelog.outputs.content }}
       isPrerelease: ${{ inputs.isPrerelease }}
     steps:
-      - name: Verify Secrets
-        uses: ./.github/actions/verify-secrets
-        with:
-          required-secrets: KEY_SSH,KEY_GPG,GIT_EMAIL,GH_TOKEN
-        env:
-          KEY_SSH: ${{ secrets.KEY_SSH }}
-          KEY_GPG: ${{ secrets.KEY_GPG }}
-          GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-
       - name: Setup Project
         uses: ./.github/actions/setup-project
         with:

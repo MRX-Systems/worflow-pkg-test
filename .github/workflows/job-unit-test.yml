@@ -17,13 +17,6 @@ jobs:
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Verify Secrets
-        uses: ./.github/actions/verify-secrets
-        with:
-          required-secrets: KEY_SSH
-        env:
-          KEY_SSH: ${{ secrets.KEY_SSH }}
-
       - name: Setup Project
         uses: ./.github/actions/setup-project
         with:

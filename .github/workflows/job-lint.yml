@@ -21,15 +21,6 @@ jobs:
     name: Lint & Auto-fix
     runs-on: ubuntu-latest
     steps:
-      - name: Verify Secrets
-        uses: ./.github/actions/verify-secrets
-        with:
-          required-secrets: KEY_SSH,KEY_GPG,GIT_EMAIL
-        env:
-          KEY_SSH: ${{ secrets.KEY_SSH }}
-          KEY_GPG: ${{ secrets.KEY_GPG }}
-          GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
-
       - name: Setup Project
         uses: ./.github/actions/setup-project
         with:

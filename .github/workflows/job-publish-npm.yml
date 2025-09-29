@@ -23,14 +23,6 @@ jobs:
     name: Publish to NPM
     runs-on: ubuntu-latest
     steps:
-      - name: Verify Secrets
-        uses: ./.github/actions/verify-secrets
-        with:
-          required-secrets: KEY_SSH,NPM_TOKEN
-        env:
-          KEY_SSH: ${{ secrets.KEY_SSH }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Setup Project
         uses: ./.github/actions/setup-project
         with:
