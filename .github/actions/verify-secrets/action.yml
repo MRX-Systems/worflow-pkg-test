@@ -1,0 +1,34 @@
+name: 'Verify Secrets'
+description: 'Verify that required secrets are present via environment variables'
+
+inputs:
+  required-secrets:
+    description: 'Comma-separated list of required secret names (must be passed via env:)'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Verify Required Secrets
+      shell: bash
+      run: |
+        echo "🔍 Verifying required secrets..."
+        IFS=',' read -ra SECRETS <<< "${{ inputs.required-secrets }}"
+        missing_secrets=()
+        
+        for secret in "${SECRETS[@]}"; do
+          secret=$(echo "$secret" | xargs) # trim whitespace
+          # Use indirect expansion to check environment variable
+          if [ -z "${!secret}" ]; then
+            echo "❌ $secret secret is missing or empty"
+            missing_secrets+=("$secret")
+          fi
+        done
+        
+        if [ ${#missing_secrets[@]} -gt 0 ]; then
+          echo "❌ Missing secrets: ${missing_secrets[*]}"
+          echo "💡 Make sure to pass secrets via 'env:' in your workflow step"
+          exit 1
+        fi
+        
+        echo "✅ All required secrets are present"

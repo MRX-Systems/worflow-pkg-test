@@ -13,32 +13,22 @@ on:
         required: true
 
 jobs:
-  run-unit-tests:
+  unit-test:
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Verify required secrets
-        run: |
-          echo "🔍 Verifying required secrets for unit test job..."
-          if [ -z "${{ secrets.KEY_SSH }}" ]; then
-            echo "❌ KEY_SSH secret is missing"
-            exit 1
-          fi
-          echo "✅ All required secrets are present"
-
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Verify Secrets
+        uses: ./.github/actions/verify-secrets
         with:
-          ref: ${{ inputs.branch }}
-          fetch-depth: 0
+          required-secrets: KEY_SSH
+        env:
+          KEY_SSH: ${{ secrets.KEY_SSH }}
+
+      - name: Setup Project
+        uses: ./.github/actions/setup-project
+        with:
+          branch: ${{ inputs.branch }}
           ssh-key: ${{ secrets.KEY_SSH }}
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-
-      - name: Install Dependencies
-        run: bun install
-
-      - name: Run Unit Tests and update Summary
-        id: unit_test
+      - name: Run Unit Tests
         run: bun run test:unit
