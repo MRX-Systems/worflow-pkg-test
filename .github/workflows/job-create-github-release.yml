@@ -45,11 +45,15 @@ jobs:
       changelog: ${{ steps.changelog.outputs.content }}
       isPrerelease: ${{ inputs.isPrerelease }}
     steps:
-      - name: Setup Project
-        uses: ./.github/actions/setup-project
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          branch: ${{ inputs.branch }}
+          ref: ${{ inputs.branch }}
+          fetch-depth: 0
           ssh-key: ${{ secrets.KEY_SSH }}
+
+      - name: Setup Bun Project
+        uses: ./.github/actions/setup-bun-project
 
       - name: Fetch Tags
         run: git fetch --tags --prune

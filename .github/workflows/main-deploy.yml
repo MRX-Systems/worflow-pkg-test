@@ -138,11 +138,15 @@ jobs:
     name: Generate Documentation
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Project
-        uses: ./.github/actions/setup-project
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          branch: main
+          ref: main
+          fetch-depth: 0
           ssh-key: ${{ secrets.KEY_SSH }}
+
+      - name: Setup Bun Project
+        uses: ./.github/actions/setup-bun-project
 
       - name: Generate Docs
         run: bun run docs
