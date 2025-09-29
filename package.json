@@ -1,6 +1,6 @@
 {
 	"name": "@mrxsys/mrx-workflow-pkg-test",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"author": "n",
 	"description": "A template to create a bun package.",
 	"type": "module",
