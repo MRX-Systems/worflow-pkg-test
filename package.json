@@ -1,7 +1,7 @@
 {
-	"name": "template-package-npm",
+	"name": "@mrxsys/mrx-workflow-pkg-test",
 	"version": "1.0.0",
-	"author": "Komiriko",
+	"author": "n",
 	"description": "A template to create a bun package.",
 	"type": "module",
 	"license": "MIT",
@@ -28,9 +28,6 @@
 		"typescript": "^5.9.2"
 	},
 	"exports": {
-		"./enums": "./dist/enums/index.js",
-		"./types": "./dist/types/index.js",
-		"./utils": "./dist/utils/index.js",
 		".": "./dist/index.js"
 	},
 	"changelog": {
@@ -84,5 +81,9 @@
 			"tagMessage": "v{{newVersion}}",
 			"tagBody": "v{{newVersion}}"
 		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/MRX-Systems/worflow-pkg-test.git"
 	}
 }

@@ -33,7 +33,7 @@ Generated SSH key with `ssh-keygen -t ed25519 -C "your_mail@domain.ext" -f your_
 
 - Get the public key with:
 	```bash
-		gpg --armor --export your_email@domain.ext
+		gpg --armor --export dev@mrxsys.com
 	```
 	
 	You will get an output like this:
@@ -46,7 +46,7 @@ Generated SSH key with `ssh-keygen -t ed25519 -C "your_mail@domain.ext" -f your_
 
 - Get the private key (for github-action) with:
 	```bash
-	gpg --armor --export-secret-keys your_email@domain.ext
+	gpg --armor --export-secret-keys dev@mrxsys.com
 	```
 	You will get an output like this:
 	```
@@ -83,7 +83,7 @@ Run the interactive setup script to configure your package:
 ```
 
 This script will prompt you for:
-- **Package name**: e.g., `@your-scope/your-package-name` or `your-package-name`
+- **Package name**: e.g., `@mrxsys/mrx-workflow-pkg-test` or `@mrxsys/mrx-workflow-pkg-test`
 - **Description**: A brief description of your package
 - **Author name**: Your name
 - **License holder**: Usually the same as author name
@@ -139,13 +139,13 @@ Update the README.md file with relevant information about your package.
 ## 🔧 Installation
 
 ```bash
-bun add @your-scope/your-package-name
+bun add @mrxsys/mrx-workflow-pkg-test
 ```
 
 ## ⚙️ Usage
 
 ```ts
-import { YourExportedFunction } from '@your-scope/your-package-name'
+import { YourExportedFunction } from '@mrxsys/mrx-workflow-pkg-test'
 
 // Example usage
 YourExportedFunction()
@@ -163,6 +163,6 @@ Distributed under the MIT License. See [LICENSE](./LICENSE) for more information
 
 ## 📧 Contact
 
-- Mail: [your-email@domain.com](mailto:your-email@domain.com)
-- Github: [Project link](https://github.com/your-username/your-repo)
+- Mail: [dev@mrxsys.com](mailto:dev@mrxsys.com)
+- Github: [Project link](https://github.com/MRX-Systems/worflow-pkg-test)
 
