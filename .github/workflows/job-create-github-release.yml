@@ -163,11 +163,11 @@ jobs:
           
           {
             echo ""
-            echo "## 🚀 GitHub Release Summary"
+            echo "## 🏷️ GitHub Release Summary"
             echo ""
-            echo "| Tag | Release Link | Signature |"
-            echo "|:----|:-------------|:----------|"
-            echo "| 🏷️ $tag | [View Release]($url) | $signature |"
+            echo "| Release | Tag | Type | Status |"
+            echo "|:--------|:----|:-----|:------:|"
+            echo "| [$release_name]($release_url) | \`$tag\` | $channel | $status_icon |"
             echo ""
-            echo "✅ Release created successfully."
+            echo "$message"
           } >> $GITHUB_STEP_SUMMARY

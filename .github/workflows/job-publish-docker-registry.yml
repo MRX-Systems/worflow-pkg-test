@@ -1,0 +1,104 @@
+name: job-publish-docker-registry
+run-name: "[job-publish-docker-registry] ${{ inputs.branch }} - ${{ inputs.dockerTags }}"
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: 'Branch to checkout'
+        required: true
+        type: string
+      dockerTags:
+        description: 'Comma-separated Docker tags to use for publish (e.g. 1.2.3,latest)'
+        required: true
+        type: string
+      imageName:
+        description: 'Full image name (e.g. ghcr.io/owner/repo, myregistry.azurecr.io/app)'
+        required: true
+        type: string
+    secrets:
+      REGISTRY_LOGIN_SERVER:
+        required: true
+      REGISTRY_USERNAME:
+        required: true
+      REGISTRY_PASSWORD:
+        required: true
+
+jobs:
+  publish:
+    name: Publish Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 0
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and Push Docker Image
+        id: build
+        run: |
+          FULL_IMAGE_NAME="${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ inputs.imageName }}"
+          echo "full-image-name=$FULL_IMAGE_NAME" >> $GITHUB_OUTPUT
+          
+          IFS=',' read -ra TAGS <<< "${{ inputs.dockerTags }}"
+          TAG_ARGS=""
+          for tag in "${TAGS[@]}"; do
+            tag=$(echo "$tag" | xargs) # trim whitespace
+            TAG_ARGS+=" -t $FULL_IMAGE_NAME:$tag"
+          done
+          
+          echo "Building and pushing: $FULL_IMAGE_NAME with tags: ${{ inputs.dockerTags }}"
+          
+          docker buildx build \
+            --platform linux/amd64 \
+            --push \
+            $TAG_ARGS \
+            .
+            
+          echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: Summary
+        run: |
+          full_image="${{ steps.build.outputs.full-image-name }}"
+          branch="${{ inputs.branch }}"
+          tags="${{ inputs.dockerTags }}"
+          status="${{ steps.build.outputs.status }}"
+          
+          if [ "$status" = "success" ]; then
+            status_icon="✅ Success"
+            message="Docker image published successfully."
+          else
+            status_icon="❌ Failed"
+            message="Docker image publication failed."
+          fi
+          
+          {
+            echo ""
+            echo "## 🐳 Docker Publish Summary"
+            echo ""
+            echo "| Branch | Docker Tags | Image | Status |"
+            echo "|:------:|:-----------:|:-----------------------------:|:------:|"
+            echo "| $branch | $tags | $full_image | $status_icon |"
+            echo ""
+            echo "$message"
+            echo ""
+            echo "**Published Tags:**"
+            IFS=',' read -ra TAG_ARRAY <<< "$tags"
+            for tag in "\${TAG_ARRAY[@]}"; do
+              echo "- \`$full_image:$tag\`"
+            done
+          } >> $GITHUB_STEP_SUMMARY
