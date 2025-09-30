@@ -77,7 +77,7 @@ jobs:
           
           {
             echo ""
-            echo "## 🚀 NPM Publish Summary"
+            echo "## 📦 NPM Publish Summary"
             echo ""
             echo "| Branch | NPM Tag | Version | Status | NPM Link |"
             echo "|:------:|:-------:|:-------:|:------:|:--------:|"
